@@ -1,0 +1,130 @@
+:root {
+    --main-color: #0077b6;
+    --accent-color: #00b4d8;
+    --bg-color: #f8f9fa;
+    --text-color: #333;
+    --card-bg: #ffffff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: 0.4s ease;
+    direction: rtl;
+}
+
+/* الأوضاع الخاصة */
+.dark {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+}
+
+.high-contrast {
+    background: #000 !important;
+    color: #ffff00 !important;
+}
+
+header {
+    background: url('https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+    height: 300px;
+    position: relative;
+    color: white;
+    text-align: center;
+}
+
+.header-overlay {
+    background: rgba(0, 119, 182, 0.7);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 15px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-tools button {
+    background: var(--main-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.login-trigger {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.container { padding: 40px 20px; max-width: 1000px; margin: auto; }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.icon-main { font-size: 3rem; color: var(--main-color); margin-bottom: 15px; }
+
+/* النافذة المنبثقة */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+    background: var(--card-bg);
+    margin: 10% auto;
+    padding: 30px;
+    width: 350px;
+    border-radius: 20px;
+    position: relative;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #eee;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.input-group input { border: none; background: none; padding: 5px 10px; width: 100%; outline: none; }
+
+.btn-login { width: 100%; padding: 12px; background: var(--main-color); border: none; color: white; border-radius: 10px; cursor: pointer; }
+
+footer { text-align: center; padding: 20px; background: var(--main-color); color: white; margin-top: 40px; }
+
+.large-text { font-size: 1.5rem; }
