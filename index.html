@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة سند - لدعم ذوي الهمم</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLogin()">&times;</span>
+            <div class="login-header">
+                <i class="fas fa-user-circle fa-3x"></i>
+                <h2>تسجيل الدخول</h2>
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" placeholder="البريد الإلكتروني" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="كلمة المرور" required>
+                </div>
+                <button type="submit" class="btn-login">دخول</button>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-overlay">
+            <h1>💙 منصة سند</h1>
+            <p>نحن معك، خطوة بخطوة نحو مستقبل أفضل</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-tools">
+            <button onclick="toggleDark()" title="وضع ليلي"><i class="fas fa-moon"></i></button>
+            <button onclick="toggleContrast()" title="تباين عالي"><i class="fas fa-adjust"></i></button>
+            <button onclick="increaseText()" title="تكبير الخط"><i class="fas fa-search-plus"></i></button>
+            <button onclick="speak()" title="قراءة الموقع"><i class="fas fa-volume-up"></i></button>
+        </div>
+        <button class="login-trigger" onclick="openLogin()">تسجيل الدخول <i class="fas fa-sign-in-alt"></i></button>
+    </nav>
+
+    <main class="container">
+        <div class="grid">
+            <section class="card">
+                <i class="fas fa-heart icon-main"></i>
+                <h2>رؤيتنا</h2>
+                <p>توفير بيئة رقمية سهلة الوصول تمكن ذوي الاحتياجات الخاصة من الحصول على كافة الخدمات والمعلومات بضغطة زر واحدة.</p>
+            </section>
+
+            <section class="card">
+                <i class="fas fa-star icon-main"></i>
+                <h2>خدماتنا المميزة</h2>
+                <ul class="services-list">
+                    <li><i class="fas fa-check"></i> خرائط أماكن مجهزة</li>
+                    <li><i class="fas fa-check"></i> استشارات طبية ونفسية</li>
+                    <li><i class="fas fa-check"></i> أدوات مساعدة ذكية</li>
+                </ul>
+            </section>
+        </div>
+
+        <section class="card contact-section">
+            <h2><i class="fas fa-paper-plane"></i> تواصل معنا مباشرة</h2>
+            <form id="contactForm">
+                <div class="form-grid">
+                    <input type="text" placeholder="الاسم" required>
+                    <input type="email" placeholder="البريد الإلكتروني" required>
+                </div>
+                <textarea placeholder="رسالتك أو طلبك هنا..." required></textarea>
+                <button type="submit" class="btn-send">إرسال الرسالة</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; 2026 - منصة سند لدعم ذوي الهمم</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
