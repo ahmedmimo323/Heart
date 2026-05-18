@@ -1,89 +1,450 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة سند - لدعم ذوي الهمم</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
+import React, { useState } from 'react';
 
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeLogin()">&times;</span>
-            <div class="login-header">
-                <i class="fas fa-user-circle fa-3x"></i>
-                <h2>تسجيل الدخول</h2>
-            </div>
-            <form id="loginForm">
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="البريد الإلكتروني" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="كلمة المرور" required>
-                </div>
-                <button type="submit" class="btn-login">دخول</button>
-            </form>
-        </div>
-    </div>
+// 100 Original Questions from محمد's test bank
+const quizQuestions = [
+  // 1-12: Python Functions Basics
+  {
+    question: "What is a function in Python?",
+    options: ["A variable", "A loop", "A block of code that performs a task", "A class"],
+    answerIndex: 2,
+    hint: "It is a reusable container of logic designed to perform a specific task."
+  },
+  {
+    question: "What is the main purpose of using functions?",
+    options: ["Increase code repetition", "Reduce code readability", "Reuse code", "Slow down execution"],
+    answerIndex: 2,
+    hint: "Think of the fundamental DRY (Don't Repeat Yourself) programming principle."
+  },
+  {
+    question: "Which keyword is used to define a function in Python?",
+    options: ["function", "define", "def", "fun"],
+    answerIndex: 2,
+    hint: "It is a short 3-letter keyword serving as an abbreviation for 'define'."
+  },
+  {
+    question: "What are parameters in a function?",
+    options: ["Outputs", "Inputs to the function", "Function names", "Variables outside the function"],
+    answerIndex: 1,
+    hint: "They act as placeholders inside the parentheses waiting to receive values."
+  },
+  {
+    question: "What does the return statement do in Python functions?",
+    options: ["Stops the program", "Prints output", "Sends a value back", "Defines a function"],
+    answerIndex: 2,
+    hint: "It exits the active function and passes the calculated result back to the caller."
+  },
+  {
+    question: "What will this code return?\n\ndef add(a, b):\n    return a + b\nprint(add(2, 3))",
+    options: ["23", "5", "\"2+3\"", "Error"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "These are integers, so Python performs standard mathematical addition."
+  },
+  {
+    question: "Which of the following is a built-in function?",
+    options: ["square()", "greet()", "print()", "add()"],
+    answerIndex: 2,
+    hint: "It is natively used to output text or values onto the console screen."
+  },
+  {
+    question: "Which of the following is a user-defined function?",
+    options: ["len()", "print()", "input()", "square()"],
+    answerIndex: 3,
+    hint: "It must be custom-created by the developer as it does not exist natively in Python."
+  },
+  {
+    question: "What does encapsulation mean in the context of functions?",
+    options: ["Writing multiple functions", "Grouping code inside a function", "Deleting code", "Running code multiple times"],
+    answerIndex: 1,
+    hint: "Think of enclosing variables and execution statements inside a single container."
+  },
+  {
+    question: "What will this code output?\n\ndef square(x):\n    return x * x\nprint(square(4))",
+    options: ["8", "12", "16", "44"],
+    answerIndex: 2,
+    isCode: true,
+    hint: "Multiply the input parameter 4 by itself."
+  },
+  {
+    question: "Which of the following is NOT a benefit of functions?",
+    options: ["Code reusability", "Easier debugging", "Increased repetition", "Cleaner code"],
+    answerIndex: 2,
+    hint: "Functions are designed to reduce redundant code, not increase it."
+  },
+  {
+    question: "What happens if a function has no explicit return statement?",
+    options: ["It returns 0", "It returns None", "It gives an error", "It returns input"],
+    answerIndex: 1,
+    hint: "Python implicitly returns its default blank value singleton."
+  },
 
-    <header>
-        <div class="header-overlay">
-            <h1>💙 منصة سند</h1>
-            <p>نحن معك، خطوة بخطوة نحو مستقبل أفضل</p>
-        </div>
-    </header>
+  // 13-20: Data Structures Basics
+  {
+    question: "What is a data structure?",
+    options: ["A type of loop", "A way to organize and store data efficiently", "A programming language", "A function"],
+    answerIndex: 1,
+    hint: "Think of organized filing systems designed for optimal search and storage."
+  },
+  {
+    question: "What is a List in Python?",
+    options: ["A single value", "A collection of elements stored in one variable", "A function", "A loop"],
+    answerIndex: 1,
+    hint: "It groups an ordered sequence of multiple values into a single variable."
+  },
+  {
+    question: "Which of the following statements is TRUE about Python Lists?",
+    options: ["Immutable", "Store only one data type", "Mutable and can store different data types", "Cannot be modified"],
+    answerIndex: 2,
+    hint: "Lists can be dynamically modified in place and hold mixed types of data."
+  },
+  {
+    question: "What is the main difference between a Python List and a traditional Array?",
+    options: ["List is faster than Array", "Array stores different data types", "List stores different types, Array stores one type", "No difference"],
+    answerIndex: 2,
+    hint: "Traditional arrays require every single element to be of the exact same type."
+  },
+  {
+    question: "What does the acronym LIFO mean in a Stack data structure?",
+    options: ["Last In First Out", "Last In Last Out", "First In First Out", "First In Last Out"],
+    answerIndex: 0,
+    hint: "Think of a pile of trays: the last one placed on top is always the first one taken off."
+  },
+  {
+    question: "What does the acronym FIFO mean in a Queue data structure?",
+    options: ["First In First Out", "First In Last Out", "Last In First Out", "Last In Last Out"],
+    answerIndex: 0,
+    hint: "Think of a customer line: the first person to arrive is the first one served."
+  },
+  {
+    question: "Which specific operation method is used to remove an element from a Stack?",
+    options: ["append()", "add()", "pop()", "remove()"],
+    answerIndex: 2,
+    hint: "It removes and returns the very last item sitting on the end of the sequence."
+  },
+  {
+    question: "What core components are contained inside a single Node within a Linked List?",
+    options: ["Only data", "Only pointer", "Data and a reference to the next node", "Index only"],
+    answerIndex: 2,
+    hint: "A node has its own value payload alongside a pointer link to the subsequent node."
+  },
 
-    <nav>
-        <div class="nav-tools">
-            <button onclick="toggleDark()" title="وضع ليلي"><i class="fas fa-moon"></i></button>
-            <button onclick="toggleContrast()" title="تباين عالي"><i class="fas fa-adjust"></i></button>
-            <button onclick="increaseText()" title="تكبير الخط"><i class="fas fa-search-plus"></i></button>
-            <button onclick="speak()" title="قراءة الموقع"><i class="fas fa-volume-up"></i></button>
-        </div>
-        <button class="login-trigger" onclick="openLogin()">تسجيل الدخول <i class="fas fa-sign-in-alt"></i></button>
-    </nav>
+  // 21-40: Python Basics & Syntax completions
+  {
+    question: "What is the correct way to declare a variable in Python?",
+    options: ["var x = 5", "int x = 5", "x = 5", "declare x = 5"],
+    answerIndex: 2,
+    hint: "Python uses dynamic typing, so you don't need any prefix keywords."
+  },
+  {
+    question: "What is the output of: `print(type(10.5))`?",
+    options: ["<class 'int'>", "<class 'float'>", "<class 'str'>", "<class 'bool'>"],
+    answerIndex: 1,
+    hint: "Since it contains a decimal point, its type is a floating-point value."
+  },
+  {
+    question: "Which operator is used for exponentiation (raising a number to a power)?",
+    options: ["^", "**", "*", "//"],
+    answerIndex: 1,
+    hint: "It is written by placing the multiplication star twice consecutively."
+  },
+  {
+    question: "Which of the following is NOT a natively built-in standard data type in Python?",
+    options: ["list", "tuple", "dict", "array"],
+    answerIndex: 3,
+    hint: "This structure must be imported from the 'array' module to create homogeneous sequences."
+  },
+  {
+    question: "What is the evaluated output produced by running the following floor division operation?\n\nx = 10\ny = 3\nprint(x // y)",
+    options: ["3.333", "3", "1", "4"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "Perform standard division and round completely down to the nearest whole integer."
+  },
+  {
+    question: "Predict the final value returned by executing this specific list length tracking sequence:\n\nlst = [1, 2, 3]\nlst.append(4)\nprint(len(lst))",
+    options: ["3", "4", "5", "Error"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "Count the total number of items left inside the list after adding 4 to the end."
+  },
+  {
+    question: "What will be printed to the output console upon running the script below?\n\ndef func():\n    print(\"Hello\")\n\nprint(func())",
+    options: ["Hello", "Prints \"Hello\" then \"None\"", "None", "Error"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "The function prints 'Hello', then returns nothing, making the outer print output its default None."
+  },
+  {
+    question: "What is the literal result outputted by the loop parameter bounds highlighted here?\n\nfor i in range(1, 4):\n    print(i, end=\" \")",
+    options: ["1 2 3 4", "1 2 3 ", "1 2 ", "Error"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "The range function stops short of the upper boundary limit, excluding the number 4."
+  },
+  {
+    question: "Determine the output displayed by implementing the constructor initialization sequence below:\n\nclass A:\n    def __init__(self):\n        print(\"Constructor\")\n\nobj = A()",
+    options: ["None", "Constructor", "Error", "A"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "Creating an instance of a class automatically executes its constructor logic."
+  },
+  {
+    question: "Complete the missing syntax step inside the following function declaration:\n\ndef square(x):\n return ______",
+    options: ["x * x", "x + x", "x ^ 2", "square(x)"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "You need an algebraic expression that multiplies variable x by itself."
+  },
+  {
+    question: "Complete the missing sequence structural keyword logic inside this loop block:\n\nfor i ______ range(5):\n print(i)",
+    options: ["in", "inside", "to", "="],
+    answerIndex: 0,
+    isCode: true,
+    hint: "A standard 2-letter membership keyword used to link variables to iterables."
+  },
+  {
+    question: "Complete the missing method call property to push 3 onto the end of the list collection:\n\nlst=[1,2]\nlst.______(3)",
+    options: ["append", "add", "push", "insert"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "Identify the standard list method that appends an item directly to the tail."
+  },
+  {
+    question: "Complete the missing constructor method name definition inside the following class block:\n\nclass A:\n def ______(self):\n  pass",
+    options: ["__init__", "constructor", "__new__", "init"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "It uses leading and trailing double underscores (dunder notation) wrapped around 'init'."
+  },
+  {
+    question: "Complete the missing statement to print 'High' when conditions validate:\n\nif x>10:\n ______(\"High\")",
+    options: ["print", "echo", "console.log", "return"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "The standard global function used to log and output text."
+  },
+  {
+    question: "Complete the missing operator assignment logic to add two directly to variable x:\n\nx=5\nx ______ 2",
+    options: ["+=", "=+", "++", "add"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "An augmented assignment operator that adds and re-binds values in one step."
+  },
+  {
+    question: "Complete the string conversion execution method to adjust casing options cleanly:\n\nprint(\"hello\".____())",
+    options: ["upper", "capitalize", "toUpper", "uppercase"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "The method converts all characters in a string to uppercase."
+  },
+  {
+    question: "Complete the missing output comment prediction evaluation step for this dictionary item lookup:\n\nd={\"a\":1}\nprint(d[\"a\"])\n# Output: ______",
+    options: ["1", "a", "KeyError", "None"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "Looking up the key string 'a' directly returns the value mapped to it."
+  },
+  {
+    question: "Find and correct the error in the following function definition block:\n\ndef add(x,y)\n return x+y",
+    options: ["Missing colon (:) after arguments", "Missing def keyword indicators", "Return statements require brackets", "Comma separations are illegal"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "Python requires a specific colon symbol to introduce new indented blocks."
+  },
+  {
+    question: "Find and isolate the execution error inside the following print statement sequence:\n\nlst=[1,2,3]\nprint(lst(1))",
+    options: ["Using parentheses instead of square brackets for index lookups", "Lists must start at index 1 bounds", "Print commands require commas", "Variable assignment name is protected"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "Identify the bracket characters used to perform standard list index lookups."
+  },
+  {
+    question: "Find the structural alignment syntax error inside the following class definition block:\n\nclass A:\ndef __init__(self):\n self.x=5",
+    options: ["Improper indentation for methods inside the class body", "Self tracking variables are illegal block definitions", "Class names must include brackets", "Dunder initialization blocks cannot accept assignment logic"],
+    answerIndex: 0,
+    isCode: true,
+    hint: "Everything defined inside a class scope block must be indented."
+  },
 
-    <main class="container">
-        <div class="grid">
-            <section class="card">
-                <i class="fas fa-heart icon-main"></i>
-                <h2>رؤيتنا</h2>
-                <p>توفير بيئة رقمية سهلة الوصول تمكن ذوي الاحتياجات الخاصة من الحصول على كافة الخدمات والمعلومات بضغطة زر واحدة.</p>
-            </section>
-
-            <section class="card">
-                <i class="fas fa-star icon-main"></i>
-                <h2>خدماتنا المميزة</h2>
-                <ul class="services-list">
-                    <li><i class="fas fa-check"></i> خرائط أماكن مجهزة</li>
-                    <li><i class="fas fa-check"></i> استشارات طبية ونفسية</li>
-                    <li><i class="fas fa-check"></i> أدوات مساعدة ذكية</li>
-                </ul>
-            </section>
-        </div>
-
-        <section class="card contact-section">
-            <h2><i class="fas fa-paper-plane"></i> تواصل معنا مباشرة</h2>
-            <form id="contactForm">
-                <div class="form-grid">
-                    <input type="text" placeholder="الاسم" required>
-                    <input type="email" placeholder="البريد الإلكتروني" required>
-                </div>
-                <textarea placeholder="رسالتك أو طلبك هنا..." required></textarea>
-                <button type="submit" class="btn-send">إرسال الرسالة</button>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026 - منصة سند لدعم ذوي الهمم</p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
+  // 41-72: OOP principles & Core syntax (class, object, self, inheritance...)
+  {
+    question: "Which keyword is used to define a class structure in Python?",
+    options: ["def", "class", "object", "struct"],
+    answerIndex: 1,
+    hint: "A standard lowercase 5-letter keyword that registers custom class blueprints."
+  },
+  {
+    question: "What is an object in Python?",
+    options: ["function", "instance of class", "loop", "variable"],
+    answerIndex: 1,
+    hint: "It represents a runtime instance allocated in memory based on a class template."
+  },
+  {
+    question: "What does the parameter `self` refer to inside a class method?",
+    options: ["class", "current object", "function", "variable"],
+    answerIndex: 1,
+    hint: "It targets the active instance calling the method."
+  },
+  {
+    question: "What is the core definition of inheritance in Object-Oriented Programming?",
+    options: ["repeating code", "reuse of code from another class", "loop", "function"],
+    answerIndex: 1,
+    hint: "Passing structural logic and attributes from a parent base down to a child class."
+  },
+  {
+    question: "What does encapsulation accomplish inside a program?",
+    options: ["hiding data", "inheritance", "loop", "variable"],
+    answerIndex: 0,
+    hint: "It wraps variable attributes securely inside classes to block outside alterations."
+  },
+  {
+    question: "What is a method in Python?",
+    options: ["variable", "function inside class", "loop", "operator"],
+    answerIndex: 1,
+    hint: "Functions declared inside class definition scopes."
+  },
+  {
+    question: "What is the literal meaning and function of polymorphism?",
+    options: ["one form", "many forms", "variable", "loop"],
+    answerIndex: 1,
+    hint: "Enabling distinct class objects to execute unique behaviors in response to identical method calls."
+  },
+  {
+    question: "What is the primary role of a constructor in Python?",
+    options: ["method to destroy object", "method to initialize object", "loop", "variable"],
+    answerIndex: 1,
+    hint: "The functional routine that binds starting state attributes to new instance objects."
+  },
+  {
+    question: "Which specific method operates as the constructor inside a Python class?",
+    options: ["init()", "__init__()", "constructor()", "start()"],
+    answerIndex: 1,
+    hint: "A dunder method that initializes class variables."
+  },
+  {
+    question: "What is recursion?",
+    options: ["loop", "function calling itself", "variable", "condition"],
+    answerIndex: 1,
+    hint: "Solving computing tasks by invoking the parent function recursively from within."
+  },
+  {
+    question: "What is a lambda function?",
+    options: ["named function", "anonymous function", "loop", "class"],
+    answerIndex: 1,
+    hint: "An inline, shorthand function declaration without a binding identifier name."
+  },
+  {
+    question: "What is the output of the following statement?\n\nf = lambda x: x * 2\nprint(f(3))",
+    options: ["3", "6", "Error", "None"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "Map the input 3 to variable x and double its value."
+  },
+  {
+    question: "What does the `*args` syntax represent inside a function signature parameter list?",
+    options: ["list of arguments", "dictionary", "string", "int"],
+    answerIndex: 0,
+    hint: "It packs multiple sequential positional inputs cleanly into an iterable collection."
+  },
+  {
+    question: "What structural type does `**kwargs` translate into inside a function definition?",
+    options: ["tuple", "dictionary of arguments", "list", "variable"],
+    answerIndex: 1,
+    hint: "It stores named keyword input mappings inside a dictionary structure."
+  },
+  {
+    question: "What is a default argument in Python?",
+    options: ["fixed value", "predefined value for parameter", "loop", "output"],
+    answerIndex: 1,
+    hint: "A predefined fallback value used if the user skips that argument parameter."
+  },
+  {
+    question: "What is the excelled output of the following block?\n\ndef f(x=5):\n    return x\nprint(f())",
+    options: ["0", "5", "None", "Error"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "Calling f() without values defaults to using its parameter fallback limit."
+  },
+  {
+    question: "What is the output of the following logic print snippet?\n\nlst = [1, 2, 3]\nprint(lst[1])",
+    options: ["1", "2", "3", "Error"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "Index 0 targets 1, while index 1 accesses the second item."
+  },
+  {
+    question: "What is the primary action performed by the `.append()` method on a list object?",
+    options: ["remove element", "add element", "sort", "clear"],
+    answerIndex: 1,
+    hint: "It attaches a target item directly onto the final position of a list."
+  },
+  {
+    question: "What is the output of the following sequence modification block?\n\nlst = [1, 2]\nlst.append(3)\nprint(lst)",
+    options: ["[1, 2]", "[1, 2, 3]", "Error", "None"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "The list modifies in-place, growing dynamically to append 3."
+  },
+  {
+    question: "What does the list method `.pop()` do by default if no structural index value is provided?",
+    options: ["remove last element", "add", "sort", "copy"],
+    answerIndex: 0,
+    hint: "It extracts, removes, and returns the absolute final item."
+  },
+  {
+    question: "What will be printed upon running this sorting block snippet?\n\nlst = [3, 1, 2]\nlst.sort()\nprint(lst)",
+    options: ["[3, 1, 2]", "[1, 2, 3]", "Error", "None"],
+    answerIndex: 1,
+    isCode: true,
+    hint: "The items are organized in-place in ascending numerical order."
+  },
+  {
+    question: "What is the output of: `print(len([1, 2, 3]))`?",
+    options: ["2", "3", "1", "Error"],
+    answerIndex: 1,
+    hint: "Count how many items exist inside this list array."
+  },
+  {
+    question: "What is the programmatic output of: `print([1, 2] * 2)`?",
+    options: ["[2, 4]", "[1, 2, 1, 2]", "Error", "None"],
+    answerIndex: 1,
+    hint: "Multiplying sequences duplicates and chains the item arrays together."
+  },
+  {
+    question: "Which of the following built-in types represents a mutable collection?",
+    options: ["tuple", "list", "int", "string"],
+    answerIndex: 1,
+    hint: "A sequence array where items can be freely changed in-place."
+  },
+  {
+    question: "What is the calculated output of the mathematical statement: `print(5 + 2 * 3)`?",
+    options: ["21", "11", "7", "Error"],
+    answerIndex: 1,
+    hint: "Evaluate multiplication before calculating addition."
+  },
+  {
+    question: "Which function is designed to capture input string streams typed by a user?",
+    options: ["read()", "input()", "get()", "scan()"],
+    answerIndex: 1,
+    hint: "Pauses script execution to intercept terminal keyboard entries."
+  },
+  {
+    question: "What is the evaluated boolean output of: `print(bool(0))`?",
+    options: ["True", "False", "Error", "None"],
+    answerIndex: 1,
+    hint: "The integer 0 is evaluated as a falsy value in Python."
+  },
+  {
+    question: "Which symbol is designated for single-line comments in Python source code?",
+    options: ["//", "#", "/* */", "--"],
+    answerIndex: 1,
+    hint: "A standard hash symbol used to document code lines."
+  },
+  {
+    question: "What is the calculated output result of: `print(10 % 3)`?",
+    options: ["1", "3", "0", "Error"],
+    answerIndex: 0,
+    hint: "Extract the remainder balance left over from division."
+  },
+  {
+    question: "Wh
